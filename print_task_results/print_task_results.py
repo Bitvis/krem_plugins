@@ -30,6 +30,6 @@ import sys
 class PluginPrintTaskResults(plugin.Plugin):
     name="print_task_results"
 
-    def task_post_processing(self, task, job):
+    def post_task_execution(self, task, job):
         print(str(task.get_task_name()) + ": " + str(job.config.get_return_code_parser().parse(task.get_task_result())))
             
