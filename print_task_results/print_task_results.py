@@ -31,5 +31,9 @@ class PluginPrintTaskResults(plugin.Plugin):
     name="print_task_results"
 
     def post_task_execution(self, task, job):
-        print(str(task.get_task_name()) + ": " + str(job.config.get_return_code_parser().parse(task.get_task_result())))
-            
+        logger = job.config.get_job_logger()
+
+        task_name = task.get_task_name()
+        task_result = job.config.get_return_code_parser().parse(task.get_task_result())
+
+        logger.write(task_name + ": " + task_result, "info")
