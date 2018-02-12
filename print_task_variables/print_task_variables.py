@@ -32,6 +32,6 @@ class PluginPrintTaskVariables(plugin.Plugin):
 
     def pre_task_execution(self, task, job):
         logger = job.config.get_job_logger()
-        logger. write("variables: " + task.get_task_name() + ": " + str(task.get_variables()), "info")
+        logger. write(task.get_run_name() + ": " + str(task.get_variables()), "info")
 
             
