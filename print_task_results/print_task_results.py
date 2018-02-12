@@ -33,7 +33,10 @@ class PluginPrintTaskResults(plugin.Plugin):
     def post_task_execution(self, task, job):
         logger = job.config.get_job_logger()
 
-        task_name = task.get_run_name()
         task_result = job.config.get_return_code_parser().parse(task.get_task_result())
 
-        logger.write(task_name + ": " + task_result, "info")
+        text = '{0:8}{1}'.format(task.get_full_run_nr(), task_result)
+
+        logger.write(text, "info")
+
+
