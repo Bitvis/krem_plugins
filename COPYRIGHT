@@ -1,4 +1,3 @@
-'''
 # Copyright (C) 2017  Bitvis AS
 #
 # This file is part of KREM.
@@ -20,9 +19,3 @@
 # Bitvis AS 
 # www.bitvis.no
 # info@bitvis.no
-'''
-
---- Description ---
-prints "<task_output_name>: <task_result>" to terminal when task is complete.
-
-For parallel tasks, the printout occurs when all the parallel tasks have completed.
