@@ -1,5 +1,5 @@
 
 
-Clone directly into <your_krem_project>/library/plugins
+Clone directly into _\<your\ krem\ project\>/library/plugins_
 
-See <krem installation>/docs/KREM_USER_MANUAL.md for guide to setup plugins in your project.
+See _\<krem\ installation\>/docs/KREM\_USER\_MANUAL.md_ for guide to setup plugins in your project.
