@@ -7,7 +7,8 @@ Adds the command "krem help", which quickly displays markdown files such as KREM
 
 This plugin supports Linux only, and requires at least one of the following terminals to be installed:
 
-	* xterm
+	* gnome-terminal
+    * xterm
     * uxterm
     * lxterm
 
@@ -28,10 +29,10 @@ Import the plugin in _setup.py_
 from library.plugins.krem_plugins.help_docs.help_docs import PluginHelpDocs
 ```
 
-and add the following to the `setup_plugins` function:
+and add the following to the `setup_cli_plugins` function:
 
 ```
-def setup_plugins(plugin_handler):
+def setup_cli_plugins(plugin_handler):
 
     plugin_handler.register_plugin(PluginHelpDocs)
 ```
