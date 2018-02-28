@@ -11,7 +11,7 @@ class PluginTaskLister(plugin.Plugin):
     def cli_list_setup_arguments(self, parser):
         group = parser.add_argument_group()
 
-        group.add_argument("-m", "--job-tasks", nargs=1,
+        group.add_argument("--job-tasks", nargs=1,
                            help="Lists tasks used in target job")
 
     def cli_list_execute_arguments_pre_cmd(self, args):
