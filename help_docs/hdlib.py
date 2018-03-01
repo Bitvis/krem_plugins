@@ -92,7 +92,32 @@ def display_doc(path):
             if not success:
                 print("[ERROR]: No supported terminals was found")
 
+def id_job(target):
+    jobs_path = kremtree.find_common_dir(c.PROJECT_JOBS_DIR)
+    num = -1
+    if isinstance(target, int):
+        num = target
+    elif isinstance(target, str) and target.isdigit():
+        num = int(target)
+
+    if not num < 0:
+        jobs = kremtree.list_dir(jobs_path)
+        jobs.sort()
+        if not num + 1 > len(jobs):
+            idx = 0
+            for job in jobs:
+                if idx == num:
+                    print("Job[" + str(num) + "]: " + str(job))
+                    target = job
+                    break
+                idx = idx + 1
+        else:
+            print("Invalid job number: " + str(num))
+
+    return target
+
 def display_job_doc(job):
+    job = id_job(job)
     path = os.path.join(kremtree.find_common_dir(c.PROJECT_JOBS_DIR), job)
 
 
@@ -102,7 +127,32 @@ def display_job_doc(job):
         print("[ERROR]: Given job not found")
         exit(1)
 
+def id_task(target):
+    task_path = kremtree.find_common_dir(c.PROJECT_TASKS_DIR)
+    num = -1
+    if isinstance(target, int):
+        num = target
+    elif isinstance(target, str) and target.isdigit():
+        num = int(target)
+
+    if not num < 0:
+        tasks = kremtree.list_dir(task_path)
+        tasks.sort()
+        if not num + 1 > len(tasks):
+            idx = 0
+            for task in tasks:
+                if idx == num:
+                    print("Task[" + str(num) + "]: " + str(task))
+                    target = task
+                    break
+                idx = idx + 1
+        else:
+            print("Invalid task number: " + str(num))
+
+    return target
+
 def display_task_doc(task):
+    task = id_task(task)
     path = os.path.join(kremtree.find_common_dir(c.PROJECT_TASKS_DIR), task)
 
     if os.path.isdir(path):
