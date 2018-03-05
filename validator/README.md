@@ -5,8 +5,8 @@ Validate job script and tasks used in target job
 
 # Usage
 ## Setup
-It is here assumed that file is located in _\<krem project\>/library\plugins\time\_validator_.
-It is also assumed that your plugin setup file is _\<krem project\>\_library/setup.py_.
+It is here assumed that file is located in _\<krem project\>/library/plugins/krem\_plugins/validator_.
+It is also assumed that your plugin setup file is _\<krem project\>/library/setup.py_.
 
 Import the plugin in _setup.py_
 
