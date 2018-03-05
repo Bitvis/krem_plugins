@@ -14,10 +14,10 @@ Import the plugin in _setup.py_
 from library.plugins.krem_plugins.validator.validator import PluginValidator
 ```
 
-and add the following to the `setup_plugins` function:
+and add the following to the `setup_cli_plugins` function:
 
 ```
-def setup_plugins(plugin_handler):
+def setup_cli_plugins(plugin_handler):
 
     plugin_handler.register_plugin(PluginValidator)
 ```
