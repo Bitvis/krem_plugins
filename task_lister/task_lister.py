@@ -1,7 +1,7 @@
 
 from krempack.core import plugin
 
-import listlib
+from . import listlib
 class PluginTaskLister(plugin.Plugin):
     name = "task-lister"
 
