@@ -34,7 +34,7 @@ def setup_cli_plugins(plugin_handler):
     '''
     #plugin_handler.register_plugin(PluginHelpDocs)
     #plugin_handler.register_plugin(PluginTaskLister)
-    #plugin_handler.register_plugin(TaskLogPrinter)
+    #plugin_handler.register_plugin(PluginTaskLogPrinter)
 
     pass
 
