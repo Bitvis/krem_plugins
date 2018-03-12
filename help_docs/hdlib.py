@@ -1,8 +1,15 @@
 import os
+import sys
 from krempack.common import kremtree
 from krempack.common import constants as c
 from subprocess import check_output
 from config import *
+
+pluginspath = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(pluginspath)
+from lib.plugin_logger import PluginLogger
+
+log = PluginLogger("help-docs")
 
 supported_terminals = ["gnome-terminal", "xterm", "uxterm", "lxterm"]
 
@@ -21,9 +28,7 @@ def get_terminal():
         errcode = process.returncode
 
         out = out.decode("utf-8")
-        print("OUT: " + str(out))
-        print("ERR: " + str(err))
-        print("RC: " + str(errcode))
+
         if not errcode:
             for check_term in supported_terminals:
                 if check_term in out:
@@ -43,7 +48,7 @@ def get_terminal_command(terminal):
     elif terminal == "lxterm":
         term_cmd = "lxterm -geometry " + terminal_size + " -e "
     else:
-        print('[ERROR]: Failed to get terminal name. Ensure you are running a terminal supported by the debug-terminal plugin')
+        log.write('Failed to get terminal name. Ensure you are running a terminal supported by the debug-terminal plugin', 'error')
     return term_cmd
 
 def try_to_run(terminal, filepath):
@@ -58,7 +63,7 @@ def try_to_run(terminal, filepath):
         try:
             os.system(cmd)
         except Exception as e:
-            print("Failed to launch. Exception raised: " + str(e))
+            log.write("Failed to launch terminal. Exception raised: " + str(e), 'error')
 
     return success
 
@@ -73,13 +78,13 @@ def display_doc(path):
                 doc_path = os.path.abspath(os.path.join(path, dir))
 
     if doc_path is None:
-        print("[ERROR]: No md file found")
+        log.write("No md file found", 'error')
         exit(1)
     else:
 
         if use_default_terminal:
            if not try_to_run(default_terminal, doc_path):
-               print("[ERROR]: Default terminal '" + default_terminal + "' not found.")
+               log.write("Default terminal '" + default_terminal + "' not found.", "error")
                exit(1)
         else:
             success = False
@@ -90,7 +95,7 @@ def display_doc(path):
                     break
 
             if not success:
-                print("[ERROR]: No supported terminals was found")
+                log.write("No supported terminals was found", 'error')
 
 def id_job(target):
     jobs_path = kremtree.find_common_dir(c.PROJECT_JOBS_DIR)
@@ -107,12 +112,11 @@ def id_job(target):
             idx = 0
             for job in jobs:
                 if idx == num:
-                    print("Job[" + str(num) + "]: " + str(job))
                     target = job
                     break
                 idx = idx + 1
         else:
-            print("Invalid job number: " + str(num))
+            log.write("Invalid job number: " + str(num), 'error')
 
     return target
 
@@ -124,7 +128,7 @@ def display_job_doc(job):
     if os.path.isdir(path):
         display_doc(path)
     else:
-        print("[ERROR]: Given job not found")
+        log.write("Given job not found", 'error')
         exit(1)
 
 def id_task(target):
@@ -142,12 +146,11 @@ def id_task(target):
             idx = 0
             for task in tasks:
                 if idx == num:
-                    print("Task[" + str(num) + "]: " + str(task))
                     target = task
                     break
                 idx = idx + 1
         else:
-            print("Invalid task number: " + str(num))
+            log.write("Invalid task number: " + str(num), 'error')
 
     return target
 
@@ -158,7 +161,7 @@ def display_task_doc(task):
     if os.path.isdir(path):
         display_doc(path)
     else:
-        print("[ERROR]: Given task not found")
+        log.write("Given task not found", 'error')
         exit(1)
 
 def display_manual():
@@ -170,7 +173,7 @@ def display_manual():
     if os.path.isfile(path):
         display_doc(path)
     else:
-        print("[ERROR]: Unable to find krem/docs/KREM_USER_MANUAL.md")
+        log.write("Unable to find krem/docs/KREM_USER_MANUAL.md", 'error')
 
 def display_readme():
     path = check_output(["which", "krem"]).strip()
@@ -181,7 +184,7 @@ def display_readme():
     if os.path.isfile(path):
         display_doc(path)
     else:
-        print("[ERROR]: Unable to find krem/README.md")
+        log.write("Unable to find krem/README.md", 'error')
 
 def display_file(file):
     path = file
@@ -189,4 +192,4 @@ def display_file(file):
     if os.path.isfile(path):
         display_doc(path)
     else:
-        print("[ERROR]: File not found")
+        log.write("File not found", 'error')
