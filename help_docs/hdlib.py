@@ -163,6 +163,7 @@ def display_task_doc(task):
 
 def display_manual():
     path = check_output(["which", "krem"]).strip()
+    path = path.decode("utf-8")
     path = path[:-5]
     path = os.path.join(path, "docs", "KREM_USER_MANUAL.md")
 
@@ -173,6 +174,7 @@ def display_manual():
 
 def display_readme():
     path = check_output(["which", "krem"]).strip()
+    path = path.decode("utf-8")
     path = path[:-5]
     path = os.path.join(path, "README.md")
 
