@@ -1,7 +1,14 @@
 import os
 import re
+import sys
 from krempack.common import kremtree
 from krempack.common import constants as c
+
+pluginspath = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(pluginspath)
+from lib.plugin_logger import PluginLogger
+
+log = PluginLogger("task_lister")
 
 def analyse_file(path):
     file = open(path, 'r')
@@ -26,7 +33,7 @@ def analyse_file(path):
                     call_params = [param_list[0].strip(), param_list[1].strip()]
                     run_task_calls.append(call_params)
                 else:
-                    print("[ERROR]: Incorrect call to run_task in given job. Function call: " + str(line))
+                    log.write("Incorrect call to run_task in given job. Function call: " + str(line), 'error')
 
 
     for call in run_task_calls:
@@ -90,7 +97,7 @@ def id_job(target):
                     break
                 idx = idx + 1
         else:
-            print("Invalid job number: " + str(num))
+            log.write("Invalid job number: " + str(num), 'error')
 
     return target
 def run(job):
@@ -99,7 +106,7 @@ def run(job):
     job_path = os.path.join(job_path, job, "job.py")
 
     if not os.path.isfile(job_path):
-        print("[ERROR]: Given job not found")
+        log.write("Given job not found", 'error')
         exit(1)
 
     tasklist = analyse_file(job_path)
