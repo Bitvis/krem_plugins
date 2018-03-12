@@ -27,16 +27,24 @@
 
 from krempack.core import plugin
 import sys
+import os
+
+pluginspath = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(pluginspath)
+from lib.plugin_logger import PluginLogger
+
 class PluginPrintTaskResults(plugin.Plugin):
     name="print_task_results"
 
+    def __init__(self):
+        self.log = PluginLogger(self.name)
+
     def post_task_execution(self, task, job):
-        logger = job.config.get_job_logger()
 
         task_result = job.config.get_return_code_parser().parse(task.get_task_result())
 
         text = '{0:8}{1}'.format(task.get_full_run_nr(), task_result)
 
-        logger.write(text, "info")
+        self.log.write(text, "info", job)
 
 
