@@ -24,27 +24,18 @@ class PluginLogger():
     def process_info(self, info):
         new_text = ""
         if info["enabled"] and info["input"] is not None:
-            new_text = info["input"]
-            new_text_format = "{}"
-
-            if info["encapsulation"] is not None:
-                new_text = info["encapsulation"].format(info["input"])
-
-            if info["padding"] is not None:
-                new_text_format = "{:<" + str(info["padding"]) + "}"
-
-            new_text = new_text_format.format(new_text)
+            new_text = info["format"].format(input=info["input"])
         return new_text
 
     def process_log_entry(self, msg, level, task=None, job=None):     
         text = ""
 
         for info in self.info_list:
-            if info["name"] == "plugin_name":
+            if info["property"] == "plugin_name":
                 info["input"] = self.parent_name
-            elif info["name"] == "log_entry":
+            elif info["property"] == "log_entry":
                 info["input"] = msg
-            elif info["name"] == "log_level":
+            elif info["property"] == "log_level":
                 info["input"] = level.upper()
 
             text = text + self.process_info(info)
