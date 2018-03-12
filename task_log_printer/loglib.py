@@ -1,8 +1,15 @@
 import os
 import re
+import sys
 
 from krempack.common import kremtree
 from krempack.common import constants as c
+
+pluginspath = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(pluginspath)
+from lib.plugin_logger import PluginLogger
+
+log = PluginLogger("task-log-printer")
 
 def get_task_log_path(job, nr):
     job_output_path = os.path.abspath(os.path.join(kremtree.find_common_dir(c.PROJECT_OUTPUT_DIR), job))
@@ -11,7 +18,7 @@ def get_task_log_path(job, nr):
     target_job_instance = None
 
     if not os.path.isdir(job_output_path):
-        print("[ERROR]: No output directory found for provided job")
+        log.write("No output directory found for provided job", 'error')
         exit(1)
 
     for entry in os.listdir(job_output_path):
@@ -43,12 +50,11 @@ def id_job(target):
             idx = 0
             for job in jobs:
                 if idx == num:
-                    print("Job[" + str(num) + "]: " + str(job))
                     target = job
                     break
                 idx = idx + 1
         else:
-            print("Invalid job number: " + str(num))
+            log.write("Invalid job number: " + str(num), 'error')
 
     return target
 
@@ -62,10 +68,10 @@ def display_task_log(job, run_nr, last):
     job_instance, task_log_path = get_task_log_path(job, int(last))
     
     if job_instance is None:
-        print("[ERROR]: Job instance output directory not found.")
+        log.write("Job instance output directory not found.", 'error')
         exit(1)
     elif task_log_path is None:
-        print("[ERROR]: Job instance output directory found, but it does not contain a 'tasks.log' file ")
+        log.write("Job instance output directory found, but it does not contain a 'tasks.log' file ", 'error')
         exit(1)
     else:
         cmd = "cat " + task_log_path
