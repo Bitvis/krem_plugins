@@ -2,11 +2,16 @@ import datetime
 import os
 import subprocess
 import re
+import sys
 
 from krempack.core import plugin
 from krempack.common import kremtree
 
 from . import info_config as config
+
+pluginspath = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(pluginspath)
+from lib.plugin_logger import PluginLogger
 
 class PluginJobIntroText(plugin.Plugin):
     name = "job-intro-text"
@@ -14,11 +19,11 @@ class PluginJobIntroText(plugin.Plugin):
 
     def __init__(self):
         self.job = None
-        self.log_file = None
  
     def job_start(self, job):
         self.job = job
-        self.log_file = job.log.get_log_file()
+        log = PluginLogger(self.name, job.log)
+        
         intro_text = []
 
         if config.add_krem_version:
@@ -43,15 +48,11 @@ class PluginJobIntroText(plugin.Plugin):
             for line in config.additional_info:
                 intro_text.append(line)
 
-        file = open(self.log_file, 'a')
-
+        log.write("")
         for line in intro_text:
-            file.write(line + "\n")
-            print(line)
-
-        print("")
-        file.write("\n")
-
+            log.write(line)
+        log.write("")
+        
     def get_krem_version(self):
         version = None
         text = self.default_padding.format("Version:")
