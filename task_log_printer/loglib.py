@@ -78,12 +78,12 @@ def display_task_log(job, run_nr, last):
         if run_nr is not None:
             cmd = cmd + " | grep -G ^" + run_nr
 
-        print("Task log from job instance '" + os.path.join(job,job_instance) + "'")
+        log.write("Task log from job instance '" + os.path.join(job,job_instance) + "'", 'info')
         if run_nr is not None:
-            print("Run number: " + run_nr)
+            log.write("Run number: " + run_nr)
 
-        print("")
-        print("------------------------------------------------------")
+        log.write("")
+        log.write("------------------------------------------------------")
         os.system(cmd)
-        print("------------------------------------------------------")
+        log.write("------------------------------------------------------")
         

@@ -53,10 +53,10 @@ def print_task_list(tasklist):
         if len(task["taskname"]) > longest_task_name:
             longest_task_name = len(task["taskname"])
 
-    print("")
+    log.write("")
     print_string = "{:>2}{:>4}{:>" + str((longest_task_name + 4)) + "}{:>" + str((longest_task_name + 6)) + "}"
-    print(print_string.format("", "Task", "", "Function"))
-    print("")
+    log.write(print_string.format("", "Task", "", "Function"))
+    log.write("")
 
     for task in tasklist:
         variable_task_name = ""
@@ -73,9 +73,9 @@ def print_task_list(tasklist):
         else:
             function = function.strip("'").strip('"')
 
-        print(print_string.format(variable_task_name, name, variable_function_name, function))
+        log.write(print_string.format(variable_task_name, name, variable_function_name, function))
 
-    print("")
+    log.write("")
 
 def id_job(target):
     jobs_path = kremtree.find_common_dir(c.PROJECT_JOBS_DIR)
@@ -92,7 +92,7 @@ def id_job(target):
             idx = 0
             for job in jobs:
                 if idx == num:
-                    print("Job[" + str(num) + "]: " + str(job))
+                    log.write("Job[" + str(num) + "]: " + str(job), 'info')
                     target = job
                     break
                 idx = idx + 1

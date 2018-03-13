@@ -7,6 +7,10 @@ from krempack.common import constants as c
 sys.path.append(os.path.join("..", os.path.dirname(__file__)))
 import validator_config
 
+pluginspath = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(pluginspath)
+from lib.plugin_logger import PluginLogger
+
 
 class err():
     function_call = "Incorrect function call: {}"
@@ -31,20 +35,24 @@ class Error():
     def __init__(self):
         self.err_list = []
         self.warnings_on = False
+        self.log = None
+
+    def set_logger(self, logger):
+        self.log = logger
 
     def print_err(self):
         for entry in self.err_list:
-            if not entry["level"] == "WARNING" or self.warnings_on:
-                printline = "{:<11}".format("[" + entry["level"] + "]:")
+            if not entry["level"] == "warn" or self.warnings_on:
+                printline = ""
 
                 lineentry = ""
                 if entry["linenr"]:
                     lineentry = "(Line {})".format(entry["linenr"])
-                printline = printline + "{:<11}".format(lineentry)
+                printline = printline + "{}".format(lineentry)
                     
                 printline = printline + entry["text"]
             
-                print(printline)
+                self.log.write(printline, entry['level'])
 
     def set(self, text, level, linenr=None):
         self.err_list.append({"text":text, "level": level, "linenr":linenr})
@@ -56,6 +64,11 @@ class SyntaxValidator():
         self.error = Error()
         self.job_script = job_script
         self.job_script_order = None
+        self.log = None
+
+    def set_logger(self, logger):
+        self.log = logger
+        self.error.set_logger(logger)
 
     def load_config(self):
         self.job_script_order = validator_config.job_script_order
@@ -71,7 +84,7 @@ class SyntaxValidator():
             for expected in self.job_script_order:
                 if len(line) > 0 and line in expected["line"]:
                     if expected["found"] and expected["required"]:
-                        self.error.set(err.syntax_multiple.format(line), "ERROR", line_number)
+                        self.error.set(err.syntax_multiple.format(line), "error", line_number)
                         passed = False
                     else:
                         expected["found"] = True
@@ -80,7 +93,7 @@ class SyntaxValidator():
         # Register missing lines
         for expected in self.job_script_order:
             if not expected["found"]:
-                self.error.set(err.syntax_missing.format(expected["line"]), "ERROR")
+                self.error.set(err.syntax_missing.format(expected["line"]), "error")
                 passed = False
         
         # Check order of lines
@@ -96,7 +109,7 @@ class SyntaxValidator():
                 expected_order = []
                 for entry in self.job_script_order:
                     expected_order.append(entry["line"])
-                self.error.set(err.syntax_erroneous_order.format(expected_order, line_order), "ERROR")
+                self.error.set(err.syntax_erroneous_order.format(expected_order, line_order), "error")
                 passed = False
 
         return passed
@@ -108,6 +121,11 @@ class TaskValidator():
         self.error = Error()
         self.job_script = job_script
         self.tasklist = []
+        self.log = None
+
+    def set_logger(self, logger):
+        self.log = logger
+        self.error.set_logger(logger)
 
     def compile_task_list(self):
         call_list = []
@@ -126,10 +144,10 @@ class TaskValidator():
                     task_registered = True
                 
             if not task_registered and not re.match("^('|\").*('|\")$", call["name"]):
-                self.error.set(err.arg_not_string.format("task", call["name"]), "WARNING", call["line_number"])
+                self.error.set(err.arg_not_string.format("task", call["name"]), "warn", call["line_number"])
                 task_registered = True
             elif not task_registered and not re.match("^('|\").*('|\")$", call["function"]):
-                self.error.set(err.arg_not_string.format("task function", call["function"]), "WARNING", call["line_number"])
+                self.error.set(err.arg_not_string.format("task function", call["function"]), "warn", call["line_number"])
                 task_registered = True
 
             if not task_registered:
@@ -146,11 +164,11 @@ class TaskValidator():
             task_script_path = os.path.join(task_path, "task.py")
 
             if not os.path.isdir(task_path) and task["name"] not in error_tasks_found:
-                self.error.set(err.not_found.format("Task directory ", task_path), "ERROR")
+                self.error.set(err.not_found.format("Task directory ", task_path), "error")
                 success = False
                 error_tasks_found.append(task["name"])
             elif not os.path.isfile(task_script_path) and task["name"] not in error_tasks_found:
-                self.error.set(err.not_found.format("Task script ", task_script_path), "ERROR")
+                self.error.set(err.not_found.format("Task script ", task_script_path), "error")
                 success = False
                 error_tasks_found.append(task["name"])
             else:
@@ -162,7 +180,7 @@ class TaskValidator():
                         task_function_line = line
             
             if not len(task_function_line) > 0:
-                self.error.set(err.missing_task_function.format(task["function"], task_script_path), "ERROR")
+                self.error.set(err.missing_task_function.format(task["function"].strip("'").strip('"'), task_script_path), "error")
                 success = False
                 
                     
@@ -210,15 +228,15 @@ class TaskValidator():
 
             if parameters is not None:
                 if not "task" in parameters[0] and task_function not in task_functions_checked:
-                    self.error.set(err.missing_function_argument.format("task", call["function"], task_script_path), "ERROR")
+                    self.error.set(err.missing_function_argument.format("task", call["function"], task_script_path), "error")
 
                 if call["arguments"]:
                     if ("task" in parameters[0] and len(parameters) < 2) or ("task" not in parameters[0] and parameters[0] == ""):
-                        self.error.set(err.unexpected_arguments.format(call["name"], call["function"]), "ERROR", call["line_number"])
+                        self.error.set(err.unexpected_arguments.format(call["name"], call["function"]), "error", call["line_number"])
                         success = False
                 if not call["arguments"]:
                     if ("task" in parameters[0] and len(parameters) > 1) or ("task" not in parameters[0] and parameters[0] != ""):
-                        self.error.set(err.missing_arguments.format(call["name"], call["function"]), "ERROR", call["line_number"])
+                        self.error.set(err.missing_arguments.format(call["name"], call["function"]), "error", call["line_number"])
                         success = False
 
             task_functions_checked.append(task_function)
@@ -264,10 +282,10 @@ class TaskValidator():
                         if re.match("return", line):
                             num_return_arguments = line.split(",")
                             if len(num_return_arguments) > call["return_arguments"]:
-                                self.error.set(err.more_arguments_returned.format(call["name"], call["function"]), "WARNING", call["line_number"])
+                                self.error.set(err.more_arguments_returned.format(call["name"], call["function"]), "warn", call["line_number"])
                                 
                             elif len(num_return_arguments) < call["return_arguments"]:
-                                self.error.set(err.less_arguments_returned.format(call["name"], call["function"]), "ERROR", call["line_number"])
+                                self.error.set(err.less_arguments_returned.format(call["name"], call["function"]), "error", call["line_number"])
                                 success = False
                             break
                             
@@ -293,6 +311,11 @@ class RunTaskValidator():
         self.job_script = job_script
         self.job_start_call = None
         self.job_end_call = None
+        self.log = None
+
+    def set_logger(self, logger):
+        self.log = logger
+        self.error.set_logger(logger)
 
     def is_run_task_call(self, line):
         task_call = False
@@ -334,7 +357,7 @@ class RunTaskValidator():
 
         for run_task_call in run_task_calls:
             if run_task_call["name"] is None or run_task_call["function"] is None:
-                self.error.set(err.function_call.format(run_task_call["call"]), "ERROR", run_task_call["line_number"])
+                self.error.set(err.function_call.format(run_task_call["call"]), "error", run_task_call["line_number"])
                 passed = False
 
         return passed
@@ -356,10 +379,10 @@ class RunTaskValidator():
             if self.is_run_task_call(line):
                 if not job_start_found:
                     success = False
-                    self.error.set(err.run_task_before_start.format(self.job_start_call), "ERROR", line_number)
+                    self.error.set(err.run_task_before_start.format(self.job_start_call), "error", line_number)
                 if job_end_found:
                     success = False
-                    self.error.set(err.run_task_after_start.format(self.job_end_call), "ERROR", line_number)
+                    self.error.set(err.run_task_after_start.format(self.job_end_call), "error", line_number)
 
         return success
 
@@ -376,19 +399,19 @@ class RunTaskValidator():
                 parallel_run_started = False
 
             elif "wait_for_complete" in line and not parallel_run_started:
-                self.error.set(err.wait_for_no_running_parallels, "ERROR", line_number)
+                self.error.set(err.wait_for_no_running_parallels, "error", line_number)
                 success = False
 
             elif parallel_run_started and self.job_end_call in line:
-                self.error.set(err.missing_wait_for_parallels.format(self.job_end_call), "ERROR", line_number)
+                self.error.set(err.missing_wait_for_parallels.format(self.job_end_call), "error", line_number)
                 success = False
 
             elif parallel_run_started and "run_task_serial(" in line:
-                self.error.set(err.missing_wait_for_parallels.format("run_task_serial()"), "ERROR", line_number)
+                self.error.set(err.missing_wait_for_parallels.format("run_task_serial()"), "error", line_number)
                 success = False
 
             elif parallel_run_started and "get_task_results(" in line:
-                self.error.set(err.missing_wait_for_parallels.format("get_task_results()"), "ERROR", line_number)
+                self.error.set(err.missing_wait_for_parallels.format("get_task_results()"), "error", line_number)
                 success = False
 
         return success
@@ -410,22 +433,22 @@ class RunTaskValidator():
 
 
 class Validator():
-    def __init__(self, job):
-        self.error = Error()
+    def __init__(self, job_name, job=None):
         self.job_script = []
-        self.job = self.id_job(job)
+        self.job_name = self.id_job(job_name)
         self.job_path = self.get_job_path()
         self.validator_list = []
         self.en_validate_syntax = True
         self.en_validate_run_task_calls = True
         self.en_validate_tasks = True
+        self.log = PluginLogger("validator", job)
 
     def get_job_path(self):
         job_path = os.path.abspath(kremtree.find_common_dir(c.PROJECT_JOBS_DIR))
-        job_path = os.path.join(job_path, self.job, "job.py")
+        job_path = os.path.join(job_path, self.job_name, "job.py")
 
         if not os.path.isfile(job_path):
-            print("Given job does not exist")
+            self.log.write("Given job does not exist", 'error')
             exit(1)
 
         return job_path
@@ -449,7 +472,7 @@ class Validator():
                         break
                     idx = idx + 1
             else:
-                print("Invalid job number: " + str(num))
+                self.log.write("Invalid job number: " + str(num), 'error')
                 exit(1)
 
         return target
@@ -475,21 +498,19 @@ class Validator():
         file.close()
 
     def print_intro(self, validator):
-        print("-----------------------------------------")
-        sys.stdout.write("{:<40}".format("Checking: " + validator.print_name))
+        self.log.write("checking: " + validator.print_name, 'debug')
 
-    def print_results(self, validator):
+    def print_errors(self, validator):
         if len(validator.error.err_list) > 0:
-            print("")
             validator.error.print_err()
-        else:
-            print("OK")
-    def print_end(self, validator):
-        print("")
+    def print_end(self, success):
+        if success:
+            self.log.write("Validation passed", 'info')
+        self.log.write("-------------------------------------")
 
 
     def run(self):
-        print("Validating job: " + self.job + "\n")
+        self.log.write("Validating job: " + self.job_name, 'info')
         success = True
 
         if success:
@@ -503,9 +524,12 @@ class Validator():
                 self.validator_list.append(TaskValidator(self.job_script))       
 
             for validator in self.validator_list:
-                self.print_intro(validator)    
+                validator.set_logger(self.log)
+                self.print_intro(validator)
                 success = validator.run() and success
-                self.print_results(validator)
-                self.print_end(validator)
+                if len(validator.error.err_list) > 0:                     
+                    self.print_errors(validator)
+                    
+            self.print_end(success)
 
         return(not success)
