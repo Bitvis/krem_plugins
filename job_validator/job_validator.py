@@ -2,7 +2,7 @@ import os
 from krempack.core import plugin
 from . import valib
 
-class PluginValidator(plugin.Plugin):
+class PluginJobValidator(plugin.Plugin):
     name = "validator"
 
     def __init__(self):

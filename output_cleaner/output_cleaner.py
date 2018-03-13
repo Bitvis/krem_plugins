@@ -1,7 +1,7 @@
 import os
 from krempack.core import plugin
 
-class PluginCleaner(plugin.Plugin):
+class PluginOutputCleaner(plugin.Plugin):
     name = "cleaner"
 
     def __init__(self):
