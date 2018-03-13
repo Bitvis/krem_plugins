@@ -37,14 +37,14 @@ class PluginPrintTaskResults(plugin.Plugin):
     name="print_task_results"
 
     def __init__(self):
-        self.log = PluginLogger(self.name)
+        None
 
     def post_task_execution(self, task, job):
-
+        log = PluginLogger(self.name, job_log=job.log)
         task_result = job.config.get_return_code_parser().parse(task.get_task_result())
 
         text = '{0:8}{1}'.format(task.get_full_run_nr(), task_result)
 
-        self.log.write(text, "info", job)
+        log.write(text, "info")
 
 

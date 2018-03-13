@@ -20,7 +20,7 @@ class PluginDebugTerminal(plugin.Plugin):
     process = None
 
     def __init__(self):
-        self.log = PluginLogger(self.name)
+        self.log = None
 
     def get_terminal(self):
         terminal = None
@@ -58,7 +58,7 @@ class PluginDebugTerminal(plugin.Plugin):
         elif terminal == "lxterm":
             term_cmd = "lxterm -e "
         else:
-            self.log.write('Failed to get terminal name. Ensure you are running a terminal supported by the debug-terminal plugin', 'error', job)
+            self.log.write('Failed to get terminal name. Ensure you are running a terminal supported by the debug-terminal plugin', 'error')
         return term_cmd
 
     def tracer(self, log_path, job):
@@ -89,6 +89,7 @@ class PluginDebugTerminal(plugin.Plugin):
         return success
 
     def job_start(self, job):
+        self.log = PluginLogger(self.name, job.log)
         task_log_path = os.path.abspath(os.path.join(job.config.get_root_output_path(), job.config.get_task_logger()().get_log_file_name()))
 
         file = open(task_log_path, 'w')
@@ -97,15 +98,15 @@ class PluginDebugTerminal(plugin.Plugin):
         try:
             PluginDebugTerminal.process = Process(target=self.tracer, args=(task_log_path,job,)) 
             PluginDebugTerminal.process.start()
-            self.log.write('Debug terminal started', 'debug', job)
+            self.log.write('Debug terminal started', 'debug')
             sleep(0.5)
         except Exception as e:
-            self.log.write('Failed to start debug terminal. Exception raised: ' + str(e), 'error', job)
+            self.log.write('Failed to start debug terminal. Exception raised: ' + str(e), 'error')
 
     def job_end(self, job):
         if PluginDebugTerminal.process.is_alive():
             try:
                 PluginDebugTerminal.process.terminate()
-                self.log.write('Debug terminal stopped', 'debug', job)
+                self.log.write('Debug terminal stopped', 'debug')
             except Exception as e:
-                self.log.write('Failed to stop debug terminal. Exception raised: ' + str(e), 'error', job)
+                self.log.write('Failed to stop debug terminal. Exception raised: ' + str(e), 'error')
