@@ -45,13 +45,13 @@ class PluginTimeTaskFunction(plugin.Plugin):
 
     def pre_task_function_call(self, task):
         self.log.write("started " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "info")
-        data = time.clock()
+        data = time.time()
         task.set_plugin_data(PluginTimeTaskFunction.name, data)
 
 
     def post_task_function_call(self, task):
 
-        end = time.clock()
+        end = time.time()
 
         time_taken = end - task.get_plugin_data(PluginTimeTaskFunction.name)
 
