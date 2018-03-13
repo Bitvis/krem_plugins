@@ -92,7 +92,7 @@ def id_job(target):
             idx = 0
             for job in jobs:
                 if idx == num:
-                    print("Job[" + str(num) + "]: " + str(job))
+                    log.write("Job[" + str(num) + "]: " + str(job), 'info')
                     target = job
                     break
                 idx = idx + 1
