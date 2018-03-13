@@ -1,9 +1,8 @@
 
 # Description
 
-Measures time it takes to execute a task function.
-
-Time is printed to tasks.log during job execution.
+Logs task function execution time. It also logs date and time for when a task function has started
+and stopped. Logs to _tasks.log_
 
 # Usage
 It is here assumed that file is located in _\<krem project\>/library\plugins\time\_task\_function_.
