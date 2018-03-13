@@ -22,7 +22,11 @@ def setup_plugins(plugin_handler):
     '''
     #plugin_handler.register_plugin(PluginPrintTaskResults)
     #plugin_handler.register_plugin(PluginDebugTerminal)
+
     #plugin_handler.register_plugin(PluginTimeTaskFunction)
+    #plugin_handler.hooks["pre_task_function_call"].append_last_to_execute(PluginTimeTaskFunction)
+    #plugin_handler.hooks["post_task_function_call"].append_first_to_execute(PluginTimeTaskFunction)
+
     #plugin_handler.register_plugin(PluginJobIntroText)
     #plugin_handler.register_plugin(PluginValidator)
 

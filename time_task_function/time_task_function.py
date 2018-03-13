@@ -28,25 +28,39 @@
 from krempack.core import plugin
 import sys
 import time
+import os
+import datetime
 
+
+pluginspath = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(pluginspath)
+from lib.plugin_logger import PluginLogger
 
 
 class PluginTimeTaskFunction(plugin.Plugin):
     name = "time_task_function"
-    start = None
+
+    def __init__(self):
+        self.log = PluginLogger(self.name)
 
     def pre_task_function_call(self, task):
-        PluginTimeTaskFunction.start = time.clock()
+        self.log.write("started " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "info")
+        data = time.clock()
+        task.set_plugin_data(PluginTimeTaskFunction.name, data)
 
-        logger = task.get_logger()
-        PluginTimeTaskFunction.run = task.get_full_run_nr()
 
     def post_task_function_call(self, task):
-        logger = task.get_logger()
 
         end = time.clock()
-        time_taken = end - PluginTimeTaskFunction.start
 
-        str_time = "*** {:f}s spent by task function ({}) ***".format(time_taken, PluginTimeTaskFunction.name)
+        time_taken = end - task.get_plugin_data(PluginTimeTaskFunction.name)
 
-        logger.write_to_log(task.get_full_run_nr() + "  " + str_time)
+        str_time = "executed in {:f}s".format(time_taken)
+
+        self.log.write(str_time, "info")
+        self.log.write("stopped " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "info")
+
+
+
+
+
