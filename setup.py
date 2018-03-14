@@ -5,7 +5,7 @@ Use following import if krem_plugins repo is placed in library,
 or add other plugins in the same way
 '''
 from library.plugins.krem_plugins.print_task_results.print_task_results import PluginPrintTaskResults
-from library.plugins.krem_plugins.debug_terminal.debug_terminal import PluginDebugTerminal
+from library.plugins.krem_plugins.task_tasks_log_terminal.task_tasks_log_terminal import PluginTaskTasksLogTerminal
 from library.plugins.krem_plugins.help_docs.help_docs import PluginHelpDocs
 from library.plugins.krem_plugins.task_lister.task_lister import PluginTaskLister
 from library.plugins.krem_plugins.task_log_printer.task_log_printer import PluginTaskLogPrinter
@@ -21,7 +21,7 @@ def setup_plugins(plugin_handler):
     or add other plugins in the same way
     '''
     #plugin_handler.register_plugin(PluginPrintTaskResults)
-    #plugin_handler.register_plugin(PluginDebugTerminal)
+    #plugin_handler.register_plugin(PluginTaskTasksLogTerminal)
 
     #plugin_handler.register_plugin(PluginTimeTaskFunction)
     #plugin_handler.hooks["pre_task_function_call"].append_last_to_execute(PluginTimeTaskFunction)

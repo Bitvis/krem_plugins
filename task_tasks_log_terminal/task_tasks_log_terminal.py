@@ -15,7 +15,7 @@ default_terminal = 'gnome-terminal'
 use_default_terminal = False
 
 
-class PluginDebugTerminal(plugin.Plugin):
+class PluginTaskTasksLogTerminal(plugin.Plugin):
     name = "debug-terminal"
     process = None
 
@@ -96,17 +96,17 @@ class PluginDebugTerminal(plugin.Plugin):
         file.close()
 
         try:
-            PluginDebugTerminal.process = Process(target=self.tracer, args=(task_log_path,job,)) 
-            PluginDebugTerminal.process.start()
+            PluginTaskTasksLogTerminal.process = Process(target=self.tracer, args=(task_log_path,job,)) 
+            PluginTaskTasksLogTerminal.process.start()
             self.log.write('Debug terminal started', 'debug')
             sleep(0.5)
         except Exception as e:
             self.log.write('Failed to start debug terminal. Exception raised: ' + str(e), 'error')
 
     def job_end(self, job):
-        if PluginDebugTerminal.process.is_alive():
+        if PluginTaskTasksLogTerminal.process.is_alive():
             try:
-                PluginDebugTerminal.process.terminate()
+                PluginTaskTasksLogTerminal.process.terminate()
                 self.log.write('Debug terminal stopped', 'debug')
             except Exception as e:
                 self.log.write('Failed to stop debug terminal. Exception raised: ' + str(e), 'error')

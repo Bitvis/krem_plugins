@@ -19,7 +19,7 @@ It is also assumed that your plugin setup file is _\<krem project\>/library/setu
 Import the plugin in _setup.py_
 
 ```
-from library.plugins.krem_plugins.debug_terminal.debug_terminal import PluginDebugTerminal
+from library.plugins.krem_plugins.task_tasks_log_terminal.task_tasks_log_terminal import PluginTaskTasksLogTerminal
 ```
 
 and add the following to the `setup_plugins` function:
@@ -27,5 +27,5 @@ and add the following to the `setup_plugins` function:
 ```
 def setup_plugins(plugin_handler):
 
-    plugin_handler.register_plugin(PluginDebugTerminal)
+    plugin_handler.register_plugin(PluginTaskTasksLogTerminal)
 ```
