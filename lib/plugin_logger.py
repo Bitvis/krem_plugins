@@ -59,11 +59,9 @@ class PluginLogger():
  
                 if level == 'warn' or level == 'error':
                     if self.job_log is not None:
-                        stdout_saveout = sys.stdout
-                        sys.stdout = sys.__stdout__
+                        self.info_list = config.plugin_logger_ec_format
+                        log_text = self.process_log_entry(msg, level)
                         self.job_log.write(log_text, level)
-                        sys.stdout = stdout_saveout 
-                        
 
         # If in job context, write to job log
         elif self.job_log is not None:
