@@ -53,15 +53,14 @@ class PluginLogger():
         # If in task context, write to task log
         if "krempack.components.native.loggers_native.TaskWriter" in str(sys.stdout):
             if self.check_tc_log_level(level):
-                self.info_list = config.plugin_logger_tc_format
-                log_text = self.process_log_entry(msg, level)
-                print(log_text) #Stdout redirected to task log
- 
-                if level == 'warn' or level == 'error':
-                    if self.job_log is not None:
-                        self.info_list = config.plugin_logger_ec_format
-                        log_text = self.process_log_entry(msg, level)
-                        self.job_log.write(log_text, level)
+                if (level == 'warn' or level == 'error') and self.job_log is not None:
+                    self.info_list = config.plugin_logger_ec_format
+                    log_text = self.process_log_entry(msg, level)
+                    self.job_log.write(log_text, level) #directs printout to terminal, execution log, and task log
+                else:
+                    self.info_list = config.plugin_logger_tc_format
+                    log_text = self.process_log_entry(msg, level)
+                    print(log_text) #Stdout redirected to task log
 
         # If in job context, write to job log
         elif self.job_log is not None:
