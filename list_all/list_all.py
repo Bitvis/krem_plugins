@@ -14,5 +14,5 @@ class PluginListAll(plugin.Plugin):
 
     def cli_list_execute_arguments_pre_cmd(self,args):
 
-        if args.all is not None:
+        if args.all is True:
             lalib.list_all()
