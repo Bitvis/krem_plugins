@@ -13,6 +13,7 @@ from library.plugins.krem_plugins.time_task_function.time_task_function import P
 from library.plugins.krem_plugins.output_cleaner.output_cleaner import PluginOutputCleaner
 from library.plugins.krem_plugins.job_intro_text.job_intro_text import PluginJobIntroText
 from library.plugins.krem_plugins.job_validator.job_validator import PluginJobValidator
+from library.plugins.krem_plugins.list_all.list_all import PluginListAll
 
 def setup_plugins(plugin_handler):
     # Register runtime plugins here
@@ -43,5 +44,6 @@ def setup_cli_plugins(plugin_handler):
     #plugin_handler.register_plugin(PluginTaskLogPrinter)
     #plugin_handler.register_plugin(PluginOutputCleaner)
     #plugin_handler.register_plugin(PluginJobValidator)
+    #plugin_handler.register_plugin(PluginListAll)
     pass
 
