@@ -1,5 +1,14 @@
 # Plugin logger config
 
+'''
+These are the default configurations. Every plugin can overwrite these configurations by defining a
+configuration in the same way as below and pass it to the log.write function as below
+
+log.write(text, "info", logger_format=<plugin logger format>)
+'''
+
+
+
 # Format of log entries from hooks 'pre_task_function_call' and 'post_task_function_call' 
 #(passed to task logger)
 plugin_logger_tc_format = [ {"property" : "log_level",   "format": "{}".format("[{input}]:"),           "enabled": True},
