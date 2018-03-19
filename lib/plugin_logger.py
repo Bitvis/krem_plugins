@@ -10,8 +10,8 @@ class PluginLogger():
     log_levels = {"error":0, "warn":1, "info":2, "debug":3}
 
     def __init__(self, plugin_name, job_log=None):
-        self.parent_name = plugin_name
-        self.info_list = []
+        self.plugin_name = plugin_name
+        self.logger_format = []
         self.tc_log_level = config.tc_log_level
         self.cli_log_level = config.cli_log_level
         self.job_log = job_log
@@ -28,25 +28,25 @@ class PluginLogger():
             ret = (level in self.log_levels and self.log_levels[level] <= self.log_levels[self.cli_log_level])
         return ret
 
-    def process_info(self, info):
+    def process_format(self, format):
         new_text = ""
-        if info["enabled"] and info["input"] is not None:
-            new_text = info["format"].format(input=info["input"])
+        if format["enabled"] and format["input"] is not None:
+            new_text = format["format"].format(input=format["input"])
         return new_text
 
     def process_log_entry(self, msg, level):     
         text = ""
 
-        for info in self.info_list:
-            info["input"] = None
-            if info["property"] == "plugin_name" and level is not None:
-                info["input"] = self.parent_name
-            elif info["property"] == "log_entry":
-                info["input"] = msg
-            elif info["property"] == "log_level" and level is not None:
-                info["input"] = level.upper()
+        for format in self.logger_format:
+            format["input"] = None
+            if format["property"] == "plugin_name" and level is not None:
+                format["input"] = self.plugin_name
+            elif format["property"] == "log_entry":
+                format["input"] = msg
+            elif format["property"] == "log_level" and level is not None:
+                format["input"] = level.upper()
 
-            text = text + self.process_info(info)
+            text = text + self.process_format(format)
         return text
         
     def write(self, msg, level=None, logger_format=None):
@@ -55,17 +55,17 @@ class PluginLogger():
             if self.check_tc_log_level(level):
                 if (level == 'warn' or level == 'error') and self.job_log is not None:
                     if logger_format is not None:
-                        self.info_list = logger_format
+                        self.logger_format = logger_format
                     else:
-                        self.info_list = config.plugin_logger_ec_format
+                        self.logger_format = config.plugin_logger_ec_format
 
                     log_text = self.process_log_entry(msg, level)
                     self.job_log.write(log_text, level) #directs printout to terminal, execution log, and task log
                 else:
                     if logger_format is not None:
-                        self.info_list = logger_format
+                        self.logger_format = logger_format
                     else:
-                        self.info_list = config.plugin_logger_tc_format
+                        self.logger_format = config.plugin_logger_tc_format
 
                     log_text = self.process_log_entry(msg, level)
                     print(log_text) #Stdout redirected to task log
@@ -73,9 +73,9 @@ class PluginLogger():
         # If in job context, write to job log
         elif self.job_log is not None:
             if logger_format is not None:
-                self.info_list = logger_format
+                self.logger_format = logger_format
             else:
-                self.info_list = config.plugin_logger_ec_format
+                self.logger_format = config.plugin_logger_ec_format
             
             
             log_text = self.process_log_entry(msg, level)            
@@ -85,9 +85,9 @@ class PluginLogger():
         else:
             if self.check_cli_log_level(level):
                 if logger_format is not None:
-                    self.info_list = logger_format
+                    self.logger_format = logger_format
                 else:
-                    self.info_list = config.plugin_logger_cli_format                
+                    self.logger_format = config.plugin_logger_cli_format                
                 log_text = self.process_log_entry(msg, level)
                 print(log_text)
 
