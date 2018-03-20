@@ -45,7 +45,7 @@ class PluginPrintTaskResults(plugin.Plugin):
 
         text = '{0:8}{1}'.format(task.get_full_run_nr(), task_result)
 
-        # overwriting default logger format as defined in lib/krem_plugins_config.py
+        # overwriting default logger format as defined in krem_plugins_config.py
         plugin_logger_ec_format = [ {"property" : "log_entry",   "format": "{}".format("{input}"), "enabled": True},
                                     {"property" : "", "format": "", "enabled": False},]
 

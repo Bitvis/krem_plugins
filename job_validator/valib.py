@@ -498,7 +498,7 @@ class Validator():
         file.close()
 
     def print_intro(self, validator):
-        self.log.write("checking: " + validator.print_name, 'debug')
+        self.log.write("Checking: " + validator.print_name, 'info')
 
     def print_errors(self, validator):
         if len(validator.error.err_list) > 0:

@@ -16,6 +16,14 @@ class PluginLogger():
         self.cli_log_level = config.cli_log_level
         self.job_log = job_log
 
+        # find longest log_level string
+        # we can use it to align log entry text
+        self.max_log_level_length = 0
+        for level_text in self.log_levels:                    
+            if len(level_text) > self.max_log_level_length:
+                self.max_log_level_length = len(level_text)
+
+
     def check_tc_log_level(self, level):
         ret = True
         if level is not None:
@@ -36,6 +44,7 @@ class PluginLogger():
 
     def process_log_entry(self, msg, level):     
         text = ""
+        left_align_offset = 0
 
         for format in self.logger_format:
             format["input"] = None
@@ -45,8 +54,11 @@ class PluginLogger():
                 format["input"] = msg
             elif format["property"] == "log_level" and level is not None:
                 format["input"] = level.upper()
-
+                left_align_offset = len(self.process_format(format)) - len(level) + self.max_log_level_length + 1                
+                
             text = text + self.process_format(format)
+            # this will align next text added to text.            
+            text = text.ljust(left_align_offset)
         return text
         
     def write(self, msg, level=None, logger_format=None):
