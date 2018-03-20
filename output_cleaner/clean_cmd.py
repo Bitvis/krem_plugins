@@ -1,5 +1,5 @@
 import argparse
-import cleanlib
+import output_cleaner
 
 def readArgs():
     parser = argparse.ArgumentParser(description=
@@ -22,7 +22,7 @@ if __name__ == '__main__':
     args = readArgs()
 
     if args.all:
-        cleanlib.clean_all(args.force, args.keep)
+        output_cleaner.clean_all(args.force, args.keep)
     else:
-        cleanlib.clean(args.jobs, args.force, args.keep)
+        output_cleaner.clean(args.jobs, args.force, args.keep)
     

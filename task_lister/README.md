@@ -11,7 +11,7 @@ It is also assumed that your plugin setup file is _\<krem\_project\>/library/set
 Import the plugin in _setup.py_
 
 ```
-from library.plugins.krem_plugins.task_lister.task_lister import PluginTaskLister
+from library.plugins.krem_plugins.task_lister.task_lister_cli import PluginTaskLister
 ```
 
 and add the following to the `setup_cli_plugins` function:

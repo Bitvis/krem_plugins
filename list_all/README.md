@@ -11,7 +11,7 @@ It is also assumed that your plugin setup file is _\<krem\_project\>/library/set
 Import the plugin in _setup.py_
 
 ```
-from library.plugins.krem_plugins.list_all.list_all import PluginListAll
+from library.plugins.krem_plugins.list_all.list_all_cli import PluginListAll
 ```
 
 and add the following to the `setup_cli_plugins` function:

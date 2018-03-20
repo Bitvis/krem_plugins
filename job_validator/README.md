@@ -11,7 +11,7 @@ It is also assumed that your plugin setup file is _\<krem project\>/library/setu
 Import the plugin in _setup.py_
 
 ```
-from library.plugins.krem_plugins.validator.validator import PluginValidator
+from library.plugins.krem_plugins.validator.validator_cli import PluginValidator
 ```
 
 and add the following to the `setup_cli_plugins` function:

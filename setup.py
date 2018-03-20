@@ -4,16 +4,21 @@ from krempack.core import plugin
 Use following import if krem_plugins repo is placed in library,
 or add other plugins in the same way
 '''
+
+'''Job and task plugins'''
 from library.plugins.krem_plugins.print_task_results.print_task_results import PluginPrintTaskResults
 from library.plugins.krem_plugins.task_tasks_log_terminal.task_tasks_log_terminal import PluginTaskTasksLogTerminal
-from library.plugins.krem_plugins.help_docs.help_docs import PluginHelpDocs
-from library.plugins.krem_plugins.task_lister.task_lister import PluginTaskLister
-from library.plugins.krem_plugins.task_log_printer.task_log_printer import PluginTaskLogPrinter
 from library.plugins.krem_plugins.time_task_function.time_task_function import PluginTimeTaskFunction
-from library.plugins.krem_plugins.output_cleaner.output_cleaner import PluginOutputCleaner
 from library.plugins.krem_plugins.job_intro_text.job_intro_text import PluginJobIntroText
-from library.plugins.krem_plugins.job_validator.job_validator import PluginJobValidator
-from library.plugins.krem_plugins.list_all.list_all import PluginListAll
+
+'''CLI plugins'''
+from library.plugins.krem_plugins.task_log_printer.task_log_printer_cli import PluginTaskLogPrinter
+from library.plugins.krem_plugins.help_docs.help_docs_cli import PluginHelpDocs
+from library.plugins.krem_plugins.job_validator.job_validator_cli import PluginJobValidator
+from library.plugins.krem_plugins.list_all.list_all_cli import PluginListAll
+from library.plugins.krem_plugins.output_cleaner.output_cleaner_cli import PluginOutputCleaner
+from library.plugins.krem_plugins.task_lister.task_lister_cli import PluginTaskLister
+
 
 def setup_plugins(plugin_handler):
     # Register runtime plugins here

@@ -1,6 +1,6 @@
 import argparse
 import os
-import hdlib
+import help_docs
 
 def readArgs():
     parser = argparse.ArgumentParser(description=
@@ -21,12 +21,12 @@ if __name__ == '__main__':
     args = readArgs()
 
     if args.job is not None:
-        hdlib.display_job_doc(args.job[0])
+        help_docs.display_job_doc(args.job[0])
     elif args.task is not None:
-        hdlib.display_task_doc(args.task[0])        
+        help_docs.display_task_doc(args.task[0])        
     elif args.manual:
-        hdlib.display_manual()
+        help_docs.display_manual()
     elif args.readme:
-        hdlib.display_readme()
+        help_docs.display_readme()
     elif args.file:
-        hdlib.display_file(args.file[0])
+        hdlihelp_docsb.display_file(args.file[0])

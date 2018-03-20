@@ -1,6 +1,6 @@
 import argparse
 import os
-import valib
+import job_validator
 
 def readArgs():
     parser = argparse.ArgumentParser(description=
@@ -18,6 +18,6 @@ if __name__ == '__main__':
     args = readArgs()
 
     if args.job is not None:
-        validator = valib.Validator(args.job[0])
+        validator = job_validator.Validator(args.job[0])
         validator.run()
     

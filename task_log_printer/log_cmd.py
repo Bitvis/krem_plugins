@@ -1,6 +1,6 @@
 import argparse
 import os
-import loglib
+import task_log_printer
 
 def readArgs():
     parser = argparse.ArgumentParser(description=
@@ -28,4 +28,4 @@ if __name__ == '__main__':
     if args.last:
         last = args.last[0]
 
-    loglib.display_task_log(args.job[0], run_nr, last)
+    task_log_printer.display_task_log(args.job[0], run_nr, last)
