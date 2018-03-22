@@ -52,7 +52,6 @@ class PluginJobIntroText(plugin.Plugin):
         for line in intro_text:
             log.write(line)
         log.write("")
-        
     def get_krem_version(self):
         version = None
         text = self.default_padding.format("Version:")
