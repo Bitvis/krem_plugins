@@ -4,22 +4,23 @@ import os
 import shutil
 
 from library.returncodes import *
+from library.testlib import parameters as p
 
-def run(task, path):
-    path = os.path.abspath(path)
+def run(task):
+    
     result = rc.FAIL
     # Init test project    
     
-    if os.path.isdir(path):
+    if os.path.isdir(p.TEMP_PROJECT_PATH):
         try:
-            shutil.rmtree(path)
-            print("Removed directory: " + str(path))
+            shutil.rmtree(p.TEMP_PROJECT_PATH)
+            print("Removed directory: " + str(p.TEMP_PROJECT_PATH))
             result = rc.PASS
         except Exception:
-            print("ERROR: Failed to remove " + str(path))
+            print("ERROR: Failed to remove " + str(p.TEMP_PROJECT_PATH))
             result = rc.FAIL
     else:
-        print("WARNING: " + path + " does not exist.")
+        print("WARNING: " + p.TEMP_PROJECT_PATH + " does not exist.")
         result = rc.SKIPPED
         
     return result

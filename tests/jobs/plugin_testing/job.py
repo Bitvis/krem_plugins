@@ -16,24 +16,26 @@ if __name__ == '__main__':
     # Initialize job
     job.start()
 
-    temp_project_path = ("path", p.TEMP_PROJECT_PATH)
+    job.run_task_serial('remove_temp_project', 'run')
 
-    job.run_task_serial('remove_temp_project', 'run', arguments=[temp_project_path])
-
-    if rc.PASS == job.run_task_serial('create_temp_project', 'run', arguments=[temp_project_path]):
-        job.run_task_serial('copy_plugins_to_temp_project', 'run', arguments=[temp_project_path])        
+    if rc.PASS == job.run_task_serial('create_temp_project', 'run'):
+        job.run_task_serial('copy_plugins_to_temp_project', 'run')        
         
         # run job in temp project with default setup.py, just to check it everything is ok before we modify setup.py
-        job.run_task_serial('run_job', 'run', arguments=[temp_project_path])        
-        job.run_task_serial('copy_krem_plugins_default_setup', 'run', arguments=[temp_project_path])
+        job.run_task_serial('run_job', 'run')        
+        job.run_task_serial('copy_krem_plugins_default_setup', 'run')
         
         # sometimes running run_job close after each other may result in the same output timestamp
         # waiting 1 sec will prevent that
         time.sleep(1)
-        if rc.PASS == job.run_task_serial('run_job', 'run', arguments=[temp_project_path]):
-            job.run_task_serial('test_command_list_all', 'run', arguments=[temp_project_path])
-
-            job.run_task_serial('test_command_validate', 'validate_ok', arguments=[temp_project_path])
+        if rc.PASS == job.run_task_serial('run_job', 'run'):
+            job.run_task_serial('test_command_list_all', 'run')
+            
+            job.run_task_serial('test_command_validate', 'copy_setup')
+            job.run_task_serial('test_command_validate', 'validate_ok')
+            job.run_task_serial('test_command_validate', 'job_missing_start_end')
+            
+            #job.run_task_serial('test_command_clean', 'clean_job')
 
     # Finalize job
     job.end()

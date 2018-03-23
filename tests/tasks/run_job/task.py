@@ -7,16 +7,14 @@ from library.testlib import functions as f
 from shutil import copyfile
 
 
-def run(task, path):
+def run(task):
     result = rc.FAIL
-    
-    path = os.path.abspath(path)
 
     start_directory = os.getcwd()
 
     # Navigate to temp project dir and run
-    os.chdir(path)
-    print("Changed directory to " + str(path))
+    os.chdir(p.TEMP_PROJECT_PATH)
+    print("Changed directory to " + str(p.TEMP_PROJECT_PATH))
     shell_return = f.shell_run("krem run -j 0")
 
     if shell_return[0] == 0:

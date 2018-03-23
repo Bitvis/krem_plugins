@@ -7,49 +7,55 @@ from library.testlib import functions as f
 import shutil
 
 
-def run(task, path):
+def copy_setup():
     result = rc.PASS
 
-    project_path = os.path.abspath(path)
-    
-    # Copy plugins to test project
-    
-    # get path to plugins
-    plugins_path = os.path.join(project_path, "..", "..", "..")
-    
     setup_file = os.path.join(os.path.dirname(__file__), "files", "setup.py")
 
     # get path to destination directory
-    dest_file = os.path.join(project_path, "library", "setup.py")
+    dest_file = os.path.join(p.TEMP_PROJECT_PATH, "library", "setup.py")
 
     try:
         # copy setup.py file to test project
         shutil.copyfile(setup_file, dest_file)
-
-        os.chdir(path)        
-        print("Changed directory to " + str(path))
-    except Exception:
+        #remove *.pyc file so it gets updated after copying the setup.py file
+        os.remove(dest_file + 'c')
+        result = rc.PASS
+    except:
         result = rc.FAIL
-        print("ERROR: Failed to change current directory to: '" + path + "'")
 
-    if result == rc.PASS:
-        shell_return, output = f.shell_run("krem list -a")
+    return result
+
+
+def run(task):
+    result = copy_setup()
+    if result != rc.PASS:
+        print("nok")
+        return result
+
+    result = rc.FAIL
+
+    os.chdir(p.TEMP_PROJECT_PATH)        
+    print("Changed directory to " + str(p.TEMP_PROJECT_PATH))
+
+    shell_return, output = f.shell_run("krem list -a")
+    
+    if shell_return == 0:
+        correct_output = []
+        correct_output.append("Available jobs: \n")
+        correct_output.append("[nr]\tname\n")
+        correct_output.append("[0]\tjob_foo\n")
+        correct_output.append("Available tasks:\n")
+        correct_output.append("[nr]\tname\n")
+        correct_output.append("[0]\ttask_foo\n")
         
-        if shell_return == 0:
-            correct_output = []
-            correct_output.append("Available jobs: \n")
-            correct_output.append("[nr]\tname\n")
-            correct_output.append("[0]\tjob_foo\n")
-            correct_output.append("Available tasks:\n")
-            correct_output.append("[nr]\tname\n")
-            correct_output.append("[0]\ttask_foo\n")
-            
-            correct_line_count = 0
-            for line in output:
-                if line in correct_output:
-                    correct_line_count += 1             
+        correct_line_count = 0
+        for line in output:
+            if line in correct_output:
+                correct_line_count += 1             
 
-            if correct_line_count == 6:
-                result = rc.PASS
+        if correct_line_count == 6:
+            result = rc.PASS
+    
             
     return result

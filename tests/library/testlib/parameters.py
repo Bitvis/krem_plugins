@@ -15,6 +15,6 @@ TEST_PROJECT_OUTPUT_DIR = os.path.join(TEST_PROJECT_ROOT_PATH, "output")
 OUTPUT_LATEST_SYMLINK = "latest"
 
 TEMP_PROJECT_NAME = "temp_project"
-TEMP_PROJECT_PATH = os.path.join(TEST_PROJECT_ROOT_PATH, "output", TEMP_PROJECT_NAME)
+TEMP_PROJECT_PATH = os.path.abspath(os.path.join(TEST_PROJECT_ROOT_PATH, "output", TEMP_PROJECT_NAME))
 
 
