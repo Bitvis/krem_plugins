@@ -1,0 +1,6 @@
+[INFO]:  Validating job: job_foo
+[INFO]:  Checking: Job script syntax
+[INFO]:  Checking: Run task function calls
+[INFO]:  Checking: Tasks
+[INFO]:  Validation passed
+-------------------------------------
