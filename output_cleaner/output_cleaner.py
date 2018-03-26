@@ -125,17 +125,17 @@ def clean_target_job(job, force=False, keep=None):
     return success
 
 def clean(jobs, force, keep):
-    err = False
+    success = False
 
     if not jobs:
         log.write("No target jobs to clean.", "error")
-        err = True
+        success = True
     else:
         for job in jobs:
             job = id_job(job)
-            err = not clean_target_job(job, force, keep) and not err
+            success = not clean_target_job(job, force, keep) and not success                        
 
-    exit(err)
+    exit(not success)
 
 def clean_all(force, keep):
     success = False
