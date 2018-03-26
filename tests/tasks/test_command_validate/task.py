@@ -50,7 +50,6 @@ def copy_job(job):
 def validate_ok(task):
     
     os.chdir(p.TEMP_PROJECT_PATH)        
-    print("Changed directory to " + str(p.TEMP_PROJECT_PATH))
 
     correct_file = os.path.join(os.path.dirname(__file__), "files", "validate_ok_output")
     output_file = os.path.join(task.get_output_path(), "validate_output")
@@ -66,17 +65,177 @@ def validate_ok(task):
         
     return result
 
-def job_missing_start_end(task):
+def job_missing_start(task):
     result = rc.FAIL
 
-    if copy_job("job_missing_start_end") == rc.PASS:
+    if copy_job("job_missing_start") == rc.PASS:
 
         os.chdir(p.TEMP_PROJECT_PATH)        
-        print("Changed directory to " + str(p.TEMP_PROJECT_PATH))
 
-        shell_return, output = f.shell_run("krem validate -j job_missing_start_end")
+        shell_return, output = f.shell_run("krem validate -j job_missing_start")
 
-        if shell_return == 0:
+        if shell_return != 0:
+            # krem validate should fail in this test
             result = rc.PASS
         
     return result
+
+
+def job_missing_end(task):
+    result = rc.FAIL
+
+    if copy_job("job_missing_end") == rc.PASS:
+
+        os.chdir(p.TEMP_PROJECT_PATH)        
+
+        shell_return, output = f.shell_run("krem validate -j job_missing_end")
+
+        if shell_return != 0:
+            # krem validate should fail in this test
+            result = rc.PASS
+        
+    return result
+
+
+def job_missing_parallel_task(task):
+    result = rc.FAIL
+
+    if copy_job("job_missing_parallel_task") == rc.PASS:
+
+        os.chdir(p.TEMP_PROJECT_PATH)        
+
+        shell_return, output = f.shell_run("krem validate -j job_missing_parallel_task")
+
+        if shell_return != 0:
+            # krem validate should fail in this test
+            result = rc.PASS
+        
+    return result
+
+
+def job_missing_wait_for_complete(task):
+    result = rc.FAIL
+
+    if copy_job("job_missing_wait_for_complete") == rc.PASS:
+
+        os.chdir(p.TEMP_PROJECT_PATH)        
+
+        shell_return, output = f.shell_run("krem validate -j job_missing_wait_for_complete")
+
+        if shell_return != 0:
+            # krem validate should fail in this test
+            result = rc.PASS
+        
+    return result
+
+
+def job_missing_task(task):
+    result = rc.FAIL
+
+    if copy_job("job_missing_task") == rc.PASS:
+
+        os.chdir(p.TEMP_PROJECT_PATH)        
+
+        shell_return, output = f.shell_run("krem validate -j job_missing_task")
+
+        if shell_return != 0:
+            # krem validate should fail in this test
+            result = rc.PASS
+        
+    return result
+
+
+def job_missing_task_function(task):
+    result = rc.FAIL
+
+    if copy_job("job_missing_task_function") == rc.PASS:
+
+        os.chdir(p.TEMP_PROJECT_PATH)        
+
+        shell_return, output = f.shell_run("krem validate -j job_missing_task_function")
+
+        if shell_return != 0:
+            # krem validate should fail in this test
+            result = rc.PASS
+        
+    return result
+
+
+def job_missing_task_arguments(task):
+    result = rc.FAIL
+
+    if copy_job("job_missing_task_arguments") == rc.PASS:
+
+        os.chdir(p.TEMP_PROJECT_PATH)        
+
+        shell_return, output = f.shell_run("krem validate -j job_missing_task_arguments")
+
+        if shell_return != 0:
+            # krem validate should fail in this test
+            result = rc.PASS
+        
+    return result
+
+
+def job_add_task_after_end(task):
+    result = rc.FAIL
+
+    if copy_job("job_add_task_after_end") == rc.PASS:
+
+        os.chdir(p.TEMP_PROJECT_PATH)        
+
+        shell_return, output = f.shell_run("krem validate -j job_add_task_after_end")
+
+        if shell_return != 0:
+            # krem validate should fail in this test
+            result = rc.PASS
+        
+    return result
+
+
+def job_add_task_before_start(task):
+    result = rc.FAIL
+
+    if copy_job("job_add_task_before_start") == rc.PASS:
+
+        os.chdir(p.TEMP_PROJECT_PATH)        
+
+        shell_return, output = f.shell_run("krem validate -j job_add_task_before_start")
+
+        if shell_return != 0:
+            # krem validate should fail in this test
+            result = rc.PASS
+        
+    return result
+
+
+def job_multiple_start(task):
+    result = rc.FAIL
+
+    if copy_job("job_multiple_start") == rc.PASS:
+
+        os.chdir(p.TEMP_PROJECT_PATH)        
+
+        shell_return, output = f.shell_run("krem validate -j job_multiple_start")
+
+        if shell_return != 0:
+            # krem validate should fail in this test
+            result = rc.PASS
+        
+    return result   
+    
+
+def job_multiple_end(task):
+    result = rc.FAIL
+
+    if copy_job("job_multiple_end") == rc.PASS:
+
+        os.chdir(p.TEMP_PROJECT_PATH)        
+
+        shell_return, output = f.shell_run("krem validate -j job_multiple_end")
+
+        if shell_return != 0:
+            # krem validate should fail in this test
+            result = rc.PASS
+        
+    return result      

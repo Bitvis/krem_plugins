@@ -33,7 +33,18 @@ if __name__ == '__main__':
             
             job.run_task_serial('test_command_validate', 'copy_setup')
             job.run_task_serial('test_command_validate', 'validate_ok')
-            job.run_task_serial('test_command_validate', 'job_missing_start_end')
+            job.run_task_serial('test_command_validate', 'job_missing_start')
+            job.run_task_serial('test_command_validate', 'job_missing_end')
+            job.run_task_serial('test_command_validate', 'job_missing_parallel_task')
+            job.run_task_serial('test_command_validate', 'job_missing_wait_for_complete')
+            job.run_task_serial('test_command_validate', 'job_missing_task')
+            job.run_task_serial('test_command_validate', 'job_missing_task_function')
+            job.run_task_serial('test_command_validate', 'job_missing_task_arguments')
+            job.run_task_serial('test_command_validate', 'job_add_task_after_end')
+            job.run_task_serial('test_command_validate', 'job_add_task_before_start')
+            job.run_task_serial('test_command_validate', 'job_multiple_start')
+            job.run_task_serial('test_command_validate', 'job_multiple_end')
+            
             
             #job.run_task_serial('test_command_clean', 'clean_job')
 

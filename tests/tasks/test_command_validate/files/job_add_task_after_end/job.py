@@ -9,12 +9,14 @@ if __name__ == '__main__':
     job = kjob.Job(__file__, rc)
     setup_plugins(job.plugin_handler)
 
-    #job.start()
+    job.start()
 
 
     err = job.run_task_serial('task_foo', 'run_without_arguments')
 
     job.run_task_parallel('task_foo', 'run_with_named_arguments', arguments=[("arg1", ""), ("arg2", "run_in_parallel")])
+    job.end()
+
     job.run_task_parallel('task_foo', 'run_with_named_arguments', arguments=[("arg1", "also"), ("arg2", "run_in_parallel")])
     task_results = job.wait_for_complete()
 
@@ -22,7 +24,7 @@ if __name__ == '__main__':
     all_task_results = job.get_task_results()
 
 
-    #job.end()
+    
 
     exit(rc.PASS)
 
