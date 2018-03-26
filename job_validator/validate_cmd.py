@@ -19,5 +19,5 @@ if __name__ == '__main__':
 
     if args.job is not None:
         validator = job_validator.Validator(args.job[0])
-        validator.run()
+        exit( validator.run())
     
