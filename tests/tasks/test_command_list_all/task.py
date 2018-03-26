@@ -7,30 +7,11 @@ from library.testlib import functions as f
 import shutil
 
 
-def copy_setup():
-    result = rc.PASS
-
-    setup_file = os.path.join(os.path.dirname(__file__), "files", "setup.py")
-
-    # get path to destination directory
-    dest_file = os.path.join(p.TEMP_PROJECT_PATH, "library", "setup.py")
-
-    try:
-        # copy setup.py file to test project
-        shutil.copyfile(setup_file, dest_file)
-        #remove *.pyc file so it gets updated after copying the setup.py file
-        os.remove(dest_file + 'c')
-        result = rc.PASS
-    except:
-        result = rc.FAIL
-
-    return result
 
 
 def run(task):
-    result = copy_setup()
+    result = f.copy_setup(__file__)
     if result != rc.PASS:
-        print("nok")
         return result
 
     result = rc.FAIL

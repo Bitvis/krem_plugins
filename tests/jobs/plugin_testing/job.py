@@ -44,6 +44,9 @@ if __name__ == '__main__':
             job.run_task_serial('test_command_validate', 'job_add_task_before_start')
             job.run_task_serial('test_command_validate', 'job_multiple_start')
             job.run_task_serial('test_command_validate', 'job_multiple_end')
+
+            job.run_task_serial('test_command_clean', 'clean')
+            job.run_task_serial('test_command_clean', 'clean_all')
             
             
             #job.run_task_serial('test_command_clean', 'clean_job')

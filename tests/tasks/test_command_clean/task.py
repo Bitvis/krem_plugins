@@ -5,42 +5,68 @@ from library.returncodes import *
 from library.testlib import parameters as p
 from library.testlib import functions as f
 import shutil
-import filecmp
+import time
 
 
-def copy_setup():
-    result = rc.FAIL
 
-    try:
-        setup_file = os.path.join(os.path.dirname(__file__), "files", "setup.py")
-
-        # get path to destination directory
-        dest_file = os.path.join(p.TEMP_PROJECT_PATH, "library", "setup.py")
-
-        # copy setup.py file to test project
-        shutil.copyfile(setup_file, dest_file)
-        #remove *.pyc file so it gets updated after copying the setup.py file
-        os.remove(dest_file + 'c')
-        result = rc.PASS
-    except:
-        result = rc.FAIL
-
-    return result
-
-
-def clean_job(task):
-    result = copy_setup()
+def clean(task):
+    result = f.copy_setup(__file__)
     if result != rc.PASS:
         return result
+
+    result = rc.FAIL
 
     os.chdir(p.TEMP_PROJECT_PATH)        
     print("Changed directory to " + str(p.TEMP_PROJECT_PATH))
 
-    shell_return = f.shell_run("krem clean -j 0")
+    f.shell_run("krem init -j job_to_clean_1")    
+    f.shell_run("krem init -j job_to_clean_2")
 
-    if(shell_return == 0):
-        result = rc.PASS
-    else:
-        result = rc.FAIL
+    f.shell_run("krem run -j job_to_clean_1")
+    time.sleep(1)
+    f.shell_run("krem run -j job_to_clean_1")
+
+    #check that the job_to_clean_2 directory was created
+    job_to_clean_1_path = os.path.join(p.TEMP_PROJECT_PATH, "output", "job_to_clean_1")
+    if os.path.isdir(job_to_clean_1_path):
+        f.shell_run("krem clean -j job_to_clean_1")
         
+        #now the directory should be gone
+        if os.path.isdir(job_to_clean_1_path):
+            result = rc.FAIL
+        else:
+            result = rc.PASS
+
+    return result
+
+def clean_all(task):
+    result = f.copy_setup(__file__)
+    if result != rc.PASS:
+        return result
+
+    result = rc.FAIL
+
+    os.chdir(p.TEMP_PROJECT_PATH)        
+    print("Changed directory to " + str(p.TEMP_PROJECT_PATH))
+
+    f.shell_run("krem init -j job_to_clean_1")    
+    f.shell_run("krem init -j job_to_clean_2")
+
+    f.shell_run("krem run -j job_to_clean_1")
+    time.sleep(1)
+    f.shell_run("krem run -j job_to_clean_2")
+
+    #check that the job_to_clean_x directories where created
+    job_to_clean_1_path = os.path.join(p.TEMP_PROJECT_PATH, "output", "job_to_clean_1")
+    job_to_clean_2_path = os.path.join(p.TEMP_PROJECT_PATH, "output", "job_to_clean_2")
+    if os.path.isdir(job_to_clean_1_path) and os.path.isdir(job_to_clean_2_path):
+        
+        f.shell_run("krem clean --all")
+        
+        #now the directories should be gone
+        if os.path.isdir(job_to_clean_1_path) or os.path.isdir(job_to_clean_2_path) :
+            result = rc.FAIL
+        else:
+            result = rc.PASS
+
     return result
