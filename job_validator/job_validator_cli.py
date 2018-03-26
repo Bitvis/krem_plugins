@@ -19,7 +19,5 @@ class PluginJobValidator(plugin.Plugin):
     def cli_run_execute_arguments_pre_cmd(self, args):
         if args.validate:
             validator = job_validator.Validator(args.job[0])
-            if validator.run():
-                exit(1)
-
-    #def cli_run_execute_arguments_post_cmd(self, args):
+            if validator.run():                
+                exit(1)            

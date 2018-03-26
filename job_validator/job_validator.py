@@ -513,23 +513,22 @@ class Validator():
         self.log.write("Validating job: " + self.job_name, 'info')
         success = True
 
-        if success:
-            self.compile_job_script()
+        self.compile_job_script()
 
-            if self.en_validate_syntax:
-                self.validator_list.append(SyntaxValidator(self.job_script))
-            if self.en_validate_run_task_calls:
-                self.validator_list.append(RunTaskValidator(self.job_script))
-            if self.en_validate_tasks:
-                self.validator_list.append(TaskValidator(self.job_script))       
+        if self.en_validate_syntax:
+            self.validator_list.append(SyntaxValidator(self.job_script))
+        if self.en_validate_run_task_calls:
+            self.validator_list.append(RunTaskValidator(self.job_script))
+        if self.en_validate_tasks:
+            self.validator_list.append(TaskValidator(self.job_script))       
 
-            for validator in self.validator_list:
-                validator.set_logger(self.log)
-                self.print_intro(validator)
-                success = validator.run() and success
-                if len(validator.error.err_list) > 0:                     
-                    self.print_errors(validator)
-                    
-            self.print_end(success)
+        for validator in self.validator_list:
+            validator.set_logger(self.log)
+            self.print_intro(validator)
+            success = validator.run() and success
+            if len(validator.error.err_list) > 0:                     
+                self.print_errors(validator)
+                
+        self.print_end(success)
 
         return(not success)
