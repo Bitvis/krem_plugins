@@ -21,8 +21,13 @@ def readArgs():
 if __name__ == '__main__':
     args = readArgs()
 
+    result = 0
+
     if args.all:
-        output_cleaner.clean_all(args.force, args.keep)
+        result = output_cleaner.clean_all(args.force, args.keep)
     else:
         output_cleaner.clean(args.jobs, args.force, args.keep)
+        result = 0
+
+    exit(result)
     
