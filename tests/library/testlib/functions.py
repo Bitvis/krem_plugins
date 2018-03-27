@@ -118,18 +118,21 @@ def copy_setup(current_file):
     result = rc.PASS
     
     setup_file = os.path.join(os.path.dirname(current_file), "files", "setup.py")
-
+    
     # get path to destination directory
-    dest_file = os.path.join(p.TEMP_PROJECT_PATH, "library", "setup.py")
-
+    dest_file = os.path.join(p.TEMP_PROJECT_PATH, "library", "setup.py")    
     try:
         # copy setup.py file to test project
-        os.remove(dest_file)
-        shutil.copyfile(setup_file, dest_file)
+        os.remove(dest_file)        
+        shutil.copyfile(setup_file, dest_file)        
+
         #remove *.pyc file so it gets updated after copying the setup.py file
-        os.remove(dest_file + 'c')
-        result = rc.PASS
-    except:        
+        if os.path.exists(dest_file + 'c'):
+            os.remove(dest_file + 'c')
+        
+        result = rc.PASS        
+    except Exception as e:
+        print(e)        
         result = rc.FAIL
 
     return result

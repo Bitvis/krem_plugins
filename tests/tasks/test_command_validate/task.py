@@ -20,7 +20,8 @@ def copy_setup(task):
         # copy setup.py file to test project
         shutil.copyfile(setup_file, dest_file)
         #remove *.pyc file so it gets updated after copying the setup.py file
-        os.remove(dest_file + 'c')
+        if os.path.exists(dest_file + 'c'):
+            os.remove(dest_file + 'c')
         result = rc.PASS
     except:
         result = rc.FAIL

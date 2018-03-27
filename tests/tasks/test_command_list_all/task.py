@@ -11,11 +11,11 @@ import shutil
 
 def run(task):
     result = f.copy_setup(__file__)
+
     if result != rc.PASS:
         return result
 
     result = rc.FAIL
-
     os.chdir(p.TEMP_PROJECT_PATH)        
     print("Changed directory to " + str(p.TEMP_PROJECT_PATH))
 
