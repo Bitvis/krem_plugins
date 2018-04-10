@@ -10,6 +10,7 @@ from library.plugins.krem_plugins.print_task_results.print_task_results import P
 from library.plugins.krem_plugins.task_tasks_log_terminal.task_tasks_log_terminal import PluginTaskTasksLogTerminal
 from library.plugins.krem_plugins.time_task_function.time_task_function import PluginTimeTaskFunction
 from library.plugins.krem_plugins.job_intro_text.job_intro_text import PluginJobIntroText
+from library.plugins.krem_plugins.separate_task_log.separate_task_log import PluginSeparateTaskLog
 
 '''CLI plugins'''
 from library.plugins.krem_plugins.task_log_printer.task_log_printer_cli import PluginTaskLogPrinter
@@ -32,6 +33,10 @@ def setup_plugins(plugin_handler):
     #plugin_handler.register_plugin(PluginTimeTaskFunction)
     #plugin_handler.hooks["pre_task_function_call"].append_last_to_execute(PluginTimeTaskFunction)
     #plugin_handler.hooks["post_task_function_call"].append_first_to_execute(PluginTimeTaskFunction)
+
+    #plugin_handler.register_plugin(PluginSeparateTaskLog)
+    #plugin_handler.hooks["post_task_function_call"].append_last_to_execute(PluginSeparateTaskLog)
+    
 
     #plugin_handler.register_plugin(PluginJobIntroText)
     #plugin_handler.register_plugin(PluginJobValidator)

@@ -29,6 +29,9 @@ if __name__ == '__main__':
         # waiting 1 sec will prevent that
         time.sleep(1)
         if rc.PASS == job.run_task_serial('run_job', 'run'):
+            job.run_task_serial('test_command_clean', 'clean')
+            job.run_task_serial('test_command_clean', 'clean_all')
+
             job.run_task_serial('test_command_list_all', 'run')
             
             job.run_task_serial('test_command_validate', 'copy_setup')
@@ -45,11 +48,9 @@ if __name__ == '__main__':
             job.run_task_serial('test_command_validate', 'job_multiple_start')
             job.run_task_serial('test_command_validate', 'job_multiple_end')
 
-            job.run_task_serial('test_command_clean', 'clean')
-            job.run_task_serial('test_command_clean', 'clean_all')
+            job.run_task_serial('test_plugin_separate_task_log', 'run')
+
             
-            
-            #job.run_task_serial('test_command_clean', 'clean_job')
 
     # Finalize job
     job.end()
