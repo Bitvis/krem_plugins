@@ -1,5 +1,11 @@
 # KREM plugins - Changelog
 
+-----------------------------------------
+
+### Released: 2018-04-10
+
+- add plugin separate_task_log. This plugin extracts log for a given task and writes it to the task's output directory
+
 
 -----------------------------------------
 
