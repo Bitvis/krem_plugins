@@ -19,20 +19,24 @@ def clean(task):
     os.chdir(p.TEMP_PROJECT_PATH)        
     print("Changed directory to " + str(p.TEMP_PROJECT_PATH))
 
-    f.shell_run("krem init -j job_to_clean_1")    
-    f.shell_run("krem init -j job_to_clean_2")
+    f.shell_run("krem init -j job_to_clean")    
+    f.shell_run("krem init -j job_not_to_clean")
 
-    f.shell_run("krem run -j job_to_clean_1")
+    f.shell_run("krem run -j job_to_clean")
     time.sleep(1)
-    f.shell_run("krem run -j job_to_clean_1")
+    f.shell_run("krem run -j job_to_clean")
+    time.sleep(1)
+    f.shell_run("krem run -j job_not_to_clean")
 
     #check that the job_to_clean_2 directory was created
-    job_to_clean_1_path = os.path.join(p.TEMP_PROJECT_PATH, "output", "job_to_clean_1")
-    if os.path.isdir(job_to_clean_1_path):
-        f.shell_run("krem clean -j job_to_clean_1")
+    job_to_clean_path = os.path.join(p.TEMP_PROJECT_PATH, "output", "job_to_clean")
+    job_not_to_clean_path = os.path.join(p.TEMP_PROJECT_PATH, "output", "job_not_to_clean")
+
+    if os.path.isdir(job_to_clean_path) and os.path.isdir(job_not_to_clean_path):
+        f.shell_run("krem clean -j job_to_clean")
         
         #now the directory should be gone
-        if os.path.isdir(job_to_clean_1_path):
+        if os.path.isdir(job_to_clean_path) or not os.path.isdir(job_not_to_clean_path):
             result = rc.FAIL
         else:
             result = rc.PASS
