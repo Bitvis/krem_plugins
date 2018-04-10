@@ -6,7 +6,7 @@
 To get the krem_plugins version compatible with the latest KREM, please clone the default branch _stable_.
 
 ### Older versions
-Always clone a branch which is named after the KREM version you are using. For instance, if your KREM version is tagged v2.3.0_stable, then clone krem_plugins from branch krem_v2.3.x_compatible. 
+Always clone a branch which is named after the KREM version you are using. For instance, if your KREM version is tagged _v2.3.0_stable_, then clone krem_plugins from branch _krem_v2.3.x_compatible_. 
 
 ### Where to clone
 
