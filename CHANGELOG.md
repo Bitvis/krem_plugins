@@ -1,10 +1,17 @@
 # KREM plugins - Changelog
 
+
+-----------------------------------------
+
+### Released: 2018-04-12
+
+- adding plugin log_task_arguments. This plugin logs arguments passed to a task to the tasks.log
+
 -----------------------------------------
 
 ### Released: 2018-04-10
 
-- add plugin separate_task_log. This plugin extracts log for a given task and writes it to the task's output directory
+- adding plugin separate_task_log. This plugin extracts log for a given task and writes it to the task's output directory
 
 
 -----------------------------------------
