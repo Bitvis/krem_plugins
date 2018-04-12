@@ -48,6 +48,8 @@ if __name__ == '__main__':
             job.run_task_serial('test_command_validate', 'job_multiple_start')
             job.run_task_serial('test_command_validate', 'job_multiple_end')
 
+            job.run_task_serial('test_plugin_log_task_arguments', 'run')
+            time.sleep(1)
             job.run_task_serial('test_plugin_separate_task_log', 'run')
 
             
